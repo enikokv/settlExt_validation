@@ -29,24 +29,24 @@ import pandas as pd
 # Local variables: features from which distance will be calculated
 
 #DEFINE INPUTS
-hdx_locations = r'\\dataserver1\bmgfgrid\analysis\MOZ\School_Data\hdx_location.shp'
-NGA = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\NGA_PopulatedPlaces.shp'
-NA = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\NA_locality.shp'
+hdx_locations = r'\\hdx_location.shp'
+NGA = r'\\NGA_PopulatedPlaces.shp'
+NA = r'\\NA_locality.shp'
 
 
 #feature to which distance will be calculated
-MOZ_bldgs_Aggregate_shp = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\MOZ_bldgs_Aggregate.shp'
+MOZ_bldgs_Aggregate_shp = r'\\MOZ_bldgs_Aggregate.shp'
 #feature to which the results will be joined
-MOZ_settl_centroids = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\MOZ_settl_centroids.shp'
+MOZ_settl_centroids = r'\\MOZ_settl_centroids.shp'
 
 #DEFINE OUTPUTS
 # settlement points with near distances
-hdx_locality_near = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\hdx_locality_near.shp'
-hdx_locality_dist = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\hdx_locality_dist.shp'
-NGA_locality_near = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\NGA_locality_near.shp'
-NGA_locality_dist = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\NGA_locality_dist.shp'
-NA_locality_near = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\NA_locality_near.shp'
-NA_locality_dist = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\NA_locality_dist.shp'
+hdx_locality_near = r'\\hdx_locality_near.shp'
+hdx_locality_dist = r'\\hdx_locality_dist.shp'
+NGA_locality_near = r'\\NGA_locality_near.shp'
+NGA_locality_dist = r'\\NGA_locality_dist.shp'
+NA_locality_near = r'\\NA_locality_near.shp'
+NA_locality_dist = r'\\NA_locality_dist.shp'
 
 #execute near analysis:
 for inFeature in [hdx_locations, NGA, NA]:
@@ -88,16 +88,16 @@ for inFeature, distFeature in zip(settl_locations, distSettl):
 settl_locations = [hdx_locations, NGA]
 NewCol = ["hdx_settl", "NGA_settl"]
 # DEFINE OUTPUTS:
-hdx_near_excel = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\hdx_near_excel.xls'
-nga_near_excel = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\nga_near_excel.xls'
+hdx_near_excel = r'\\hdx_near_excel.xls'
+nga_near_excel = r'\\nga_near_excel.xls'
 near_excel = [hdx_near_excel, nga_near_excel]
 #process
 for inFeature, exfile in zip(nearSettl, near_excel):
     arcpy.TableToExcel_conversion(inFeature, exfile)
 
 #DEFINE OUTPUTS OF THE GROUPED DATA
-hdx_near_settl_csv = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\hdx_near_settl.csv'
-nga_near_settl_csv = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\nga_near_settl.csv'
+hdx_near_settl_csv = r'\\hdx_near_settl.csv'
+nga_near_settl_csv = r'\\nga_near_settl.csv'
 all_near = [hdx_near_settl_csv, nga_near_settl_csv]
 
 #group values on settlement polygon IDs (NEAR_FID):
@@ -111,7 +111,7 @@ for exfile, col, nearcsv in zip(near_excel, NewCol, all_near):
 arcpy.MakeFeatureLayer_management(MOZ_settl_centroids, "tempLayer")
 
 #DEFINE OUTPUT FEATURE CLASS (FINAL RESULT).
-MOZ_settl_joined = r'\\dataserver1\BMGFGRID\analysis\MOZ\School_Data\MOZ_settl_join.shp'
+MOZ_settl_joined = r'\\MOZ_settl_join.shp'
 
 for nearcsv in all_near:
     arcpy.AddJoin_management("tempLayer", "ORIG_FID", nearcsv, "NEAR_FID", "KEEP_ALL")
